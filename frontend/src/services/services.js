@@ -1,11 +1,11 @@
 //Vamos a traer la base de datos para poder hacer las consultas desde el frontend
-const BASE_URL='http://192.168.1.X:3000/api';
+const BASE_URL='http://192.168.0.22:3000/api';
 
 //Ahora vamos a crear cada una de las funciones para hacer las peticiones a la API,tendremos que hacer un fecth,para poder conectarse a la API
 //Empezamos por el auth,que es la función de resgistro de usuarios
 export const registerUser=async(name,email,password,perfil)=>{
      try{
-         const response=await fetch(`${BASE_URL}/auth/register`,{
+         const response=await fetch(`${BASE_URL}/auth/registro`,{
              method:'POST',
              headers:{
                 'Content-Type':'application/json'
