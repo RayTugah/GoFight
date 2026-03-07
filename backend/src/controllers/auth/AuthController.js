@@ -9,10 +9,23 @@ const registro=async(req,res)=>{
      if(!perfil){
         perfil='https://images.unsplash.com/vector-1767626090408-a23fae603963?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
      }
+        //Verificamos que no se repita el correo electronico ni la contraseña,ni el nombre de cada usuario
 
-     const salt=await bcrypt.genSalt(10);//Generamos un salt para ocultar la contraseña
-     const hashPassword=await bcrypt.hash(password,salt);//Encriptamos la contraseña con el salt
      try{
+        if(!name || !email || !password){
+            return res.status(400).json({message:'Por favor,complete todos los campos'});
+        }
+        const nameExists=await prisma.usuarios.findFirst({
+            where:{nombre:name}
+        })
+        const emailExists=await prisma.usuarios.findFirst({
+            where:{email:email}
+        })
+        if(nameExists || emailExists){
+            return res.status(400).json({message:'El nombre o correo electrónico ya existe'});
+        }
+    const salt=await bcrypt.genSalt(10);//Generamos un salt para ocultar la contraseña
+     const hashPassword=await bcrypt.hash(password,salt);//Encriptamos la contraseña con el salt
         const user=await prisma.usuarios.create({
             data:{
                 nombre:name,
@@ -32,7 +45,11 @@ const registro=async(req,res)=>{
             include:{gamificaciones:true
             }
         })
-        res.status(201).json({message:'Usuario registrado exitosamente',user});
+        //Una vez que se haya creado el usuario,generamos el token de autenticación
+          const token=generarToken(user.id_usuario,user.email,user.rol);
+          //Una vez que tengamos el token creado,lo vamos a enviar al cliente para que lo pueda usar en las siguientes peticiones
+
+        res.status(201).json({message:'Usuario registrado exitosamente',user,token});
            
             
      }catch(error){

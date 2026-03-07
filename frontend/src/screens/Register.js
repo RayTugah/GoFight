@@ -1,5 +1,5 @@
 import react from 'react';
-import {View,Text,TextInput,TouchableOpacity,StyleSheet,ScrolView, ScrollView,ActivityIndicator} from 'react-native';
+import {View,Text,TextInput,TouchableOpacity,StyleSheet,ScrolView, ScrollView,ActivityIndicator,KeyboardAvoidingView} from 'react-native';
 
 import {useState,useEffect} from 'react';
 import {registerUser} from '../services/services';
@@ -7,7 +7,11 @@ import Button from '../components/Button';
 import TextInputComponent from '../components/TextInput';
 import {useNavigation} from '@react-navigation/native';
 import {Ionicons} from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ErrorMsg from '../components/ErrorMsg';
+
+
+
 
 //Traemos el servicio para poder registrar el usuario desde el frontend,que es la función que hemos creado en services.js,que se encarga de hacer la petición a la API para registrar el usuario en la base de datos
 
@@ -41,6 +45,11 @@ export default function Register({}){
 
 
          }
+         const navigation=useNavigation();
+          //Vamos a implemenatar la lógica para navegar a la pantalla de login
+          const handleToLogin=()=>{
+                navigation.navigate('login');
+          }
           const handleClick=async()=>{
               if(!nombre  || !email || !password || !confirmPassword){
                    setMessage('Por favor,complete todos los campos');
@@ -49,7 +58,8 @@ export default function Register({}){
               else if(password!==confirmPassword){
                    setMessage('Las contraseñas no coinciden');
               }
-                else{
+               try{
+                 
                     await registerUser(nombre,email,password,'user');
                     setNombre('');
                     
@@ -57,38 +67,43 @@ export default function Register({}){
                     setPassword('');
                     setConfirmPassword('');
                     setMessage('');
-                }
+                      alert('Registro exitoso,ahora puedes iniciar sesión');
+                      navigation.navigate('home');
+                      
+              
+               }catch(error){
+                    setMessage(`Error al registrar el usuario: ${error.message}`);
+               }
 
           }
-          const navigation=useNavigation();
-          //Vamos a implemenatar la lógica para navegar a la pantalla de login
-          const handleToLogin=()=>{
-                navigation.navigate('login');
-          }
+          
+        
 
             return(
                 <View style={styles.Container}>
                     <View style={styles.FlexView}>
                         <Text style={styles.TitleStyle}>GoFight</Text>
-                        <Ionicons name="hand-left-outline" size={20} color="red" style={styles.IconStyle}/>
+                        
 
                     </View>
-                    <View>
-                         <Text style={styles.RegistrarseText}>Registrarse</Text>
-                    </View>
-                        {message ? <ErrorMsg message={message}/> : null}
+                    
+                       
 
-                    <ScrollView style={styles.FormStyle}>
+                    <KeyboardAvoidingView style={styles.FormStyle}>
+                      <Text style={styles.RegistrarseText}>Registrarse</Text>
                         <TextInputComponent placeholder="Nombre" value={nombre} onChangeText={setNombre} iconName="person-outline"/>
                         <TextInputComponent placeholder="Email" value={email} onChangeText={setEmail} keyboardType="email-address" iconName="mail-outline"/>
                         <TextInputComponent placeholder="Contraseña" value={password} onChangeText={setPassword} secureTextEntry iconName="lock-closed-outline"/>
                         <TextInputComponent placeholder="Confirmar Contraseña" value={confirmPassword} onChangeText={setConfirmPassword} secureTextEntry iconName="lock-closed-outline"/>
                         <Button title="Registrar" onPress={handleClick}/>
                         <TouchableOpacity onPress={handleToLogin}>
-                            <Text style={styles.LinkStyle}>¿Ya tienes una cuenta? Inicia sesión</Text>
+                            <Text style={styles.LinkStyle}>¿Ya tienes una cuenta?<Text style={styles.IniciarSesionText}>Iniciar Sesión</Text></Text>
                         </TouchableOpacity>
-                       
-                    </ScrollView>
+                       <View>
+                        {message ? <ErrorMsg message={message}/> : null}
+                        </View>
+
+                    </KeyboardAvoidingView>
                 </View>
             )
 }
@@ -102,6 +117,11 @@ const styles=StyleSheet.create({
         alignItems:'center',
         padding:20,
         backgroundColor:'black',
+        shadowColor:'rgba(255,0,0,0.5)',
+        shadowOffset:{width:0,height:2},
+        shadowOpacity:0.5,
+        shadowRadius:12,
+        elevation:5,
         
         
       },
@@ -125,21 +145,28 @@ const styles=StyleSheet.create({
         fontSize:20,
         fontWeight:'bold',
         marginBottom:20,
-        color:'white',
+        color:'red',
         paddingTop:20,
+        textAlign:'center',
+        textShadowColor:'rgba(255,0,0,0.5)',
         },
       TitleStyle:{
         fontSize:24,
-        fontWeight:'bold',
+        fontWeight:'700',
+        color:'#FF2233',
         marginBottom:20,
         marginTop:20,
         margin:0,
         alignContent:'center',
         textAlign:'center',
-        color:'red',
-        fontFamily:'Arial',
-        
-
+          textShadowColor:'rgba(255,34,51,0.5)',
+          textShadowOffset:{width:2,height:2},
+          textShadowRadius:10,
+          textTransform:'uppercase',
+          letterSpacing:3,
+          textShadowColor:'#FF2233',
+          textShadowOffset:{width:1,height:1},
+          textShadowRadius:3,
 
 
       },
@@ -149,7 +176,7 @@ const styles=StyleSheet.create({
         padding:20,
         borderRadius:10,
         backgroundColor:'transparent',
-        borderColor:'red',
+        borderColor:'rgba(255,0,0,0.25)',
 
 
         
@@ -157,14 +184,17 @@ const styles=StyleSheet.create({
       FormStyle:{
         width:'100%',
         marginBottom:20,
-        padding:20,
-        borderRadius:10,
-        backgroundColor:'transparent',
-        borderColor:'red',
+        padding:24,
+        borderRadius:14,
+        backgroundColor:'#0F0F0F',
+        borderColor:'rgba(255,0,0,0.25)',
         borderWidth:1,
         boxShadow:'5px 20px 15px rgba(255,0,0,0.2)',
-        shadowColor:'red',
-
+        shadowColor:'#FF2233',
+        shadowOffset:{width:0,height:4},
+        shadowOpacity:0.5,
+        shadowRadius:10,
+        elevation:5,
 
 
       },
@@ -200,8 +230,19 @@ const styles=StyleSheet.create({
         
       },
       LinkStyle:{
-        color:'#007bff',
+       fontSize:14,
+        color:'#555555',
+        alignItems:'center',
+        justifyContent:'center',
         textAlign:'center',
-        marginTop:10,
+        marginTop:20,
+
+      },
+      IniciarSesionText:{
+        color:'#127ccd',
+        fontWeight:'bold',
+        textDecorationLine:'underline',
+
       }
+
 })

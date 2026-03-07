@@ -119,4 +119,5 @@ const VerPerfilUsuario=async(req,res)=>{
         res.status(500).json({message:'Error al obtener el perfil del usuario',error:error.message});
     }
 }
+
 module.exports={ActualizarUsuario,EliminarTodosUsuarios,getAllUsuarios,MakeAdmin,DeleteUserById,VerPerfilUsuario};//Exportamos las funciones de getUsuario,EliminarUsuario y ActualizarUsuario,para poder usarlas en el archivo UsuariosRoutes.js,que es donde vamos a definir las rutas de usuarios

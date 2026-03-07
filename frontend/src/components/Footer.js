@@ -1,0 +1,129 @@
+//Aquí vamos a definir el componente footer,que es el pie de la aplicación,dónde se va a colocar cada uno de las secciones de la aplicación
+import React from 'react';
+import {View,Text,StyleSheet,FlatList, Touchable, TouchableOpacity} from 'react-native';
+import {MaterialCommunityIcons} from '@expo/vector-icons';
+
+
+const Footer=()=>{
+      const sections=[
+            {id:'1',title:'Inicio',icono:'home'},
+            {id:'2',title:'Rutinas',icono:'dumbbell'},
+            {id:'3',title:'Progreso',icono:'chart-line'},
+            {id:'4',title:'Perfil',icono:'account'},
+
+      ];
+      //Hemosdefinido las secciones,es hora de implementarlas en una FlatList,que es para renderizar listas
+      return(
+        <View style={styles.Container}>
+          <FlatList
+           data={sections}
+           flexDirection='row'
+           horizontal={true}
+           showsHorizontalScrollIndicator={false}
+           alignItems='center'
+           justifyContent='center'
+           contentContainerStyle={styles.ListStyle}
+
+           
+          
+             
+            
+
+            
+           keyExtractor={(item)=>item.id}
+           renderItem={({item})=>{
+             return (
+             <View style={styles.Item}>
+                 <TouchableOpacity style={styles.TouchableOpacity}>
+                  <MaterialCommunityIcons name={item.icono} size={24} style={styles.IconStyle}/>  
+
+                 </TouchableOpacity>
+                  <Text style={styles.TextStyle}>{item.title}</Text>
+                  
+             </View>
+             )
+           }}
+            />
+            </View>
+            //Ya hemos definido la FlatList del footer,que va renderizar cada una de las secciones en uno en uno
+      )
+     
+}
+const styles=StyleSheet.create({
+
+  ListStyle:{
+      flex:1,
+      flexDirection:'row',
+      justifyContent:'space-between',
+      alignItems:'center',
+      padding:10,
+      gap:10,
+  
+
+
+  },
+        Container:{
+            flexDirection:'row',
+            justifyContent:'center',
+            alignItems:'center',
+            padding:10,
+            gap:10,
+              borderRadius:5,
+              
+              backgroundColor:'#080808',
+             
+              
+              borderTopColor:'rgba(255,255,255,0.06)'
+         
+        
+           
+           
+           
+
+           
+
+
+        },
+        Item:{
+             borderTopColor:'black',
+            borderWidth:1,
+            borderRadius:5,
+           
+              width:80,
+              height:80,
+              justifyContent:'center',
+
+              alignItems:'center',
+              backgroundColor:'black',
+              gap:5,
+              
+              
+
+
+        },
+        TouchableOpacity:{
+              padding:5,
+              borderRadius:5,
+              
+        },
+        TextStyle:{
+              fontSize:12,
+              color:'white',
+              fontWeight:'bold',
+              textShadowColor:'black',
+              textShadowOffset:{width:1,height:1},
+        },
+        IconStyle:{
+         color:'white',
+          TextShadowColor:'white',
+          TextShadowOffset:{width:1,height:1},
+          TextShadowRadius:3,
+
+          padding:2,
+          borderRadius:3,
+         
+             
+
+        }
+})
+export default Footer;

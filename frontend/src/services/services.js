@@ -14,29 +14,37 @@ export const registerUser=async(name,email,password,perfil)=>{
                 
              }
              ,
-             body:JSON.stringify({name,email,password,perfil})//Pasamos los datos a json para poder enviarlos bien a la base de datos
+             body:JSON.stringify({name,email,password,perfil})//Pasamos los datos a json para poder enviarlos bien a la base de datos´
+            
          });//Acvcedemos a la ruta de registro como en el Insomnia,si también te fijas bien en los headers,se declara como un tipo de contendio,representando los datos que vamos a enviar
          //Una vez que ya tengamos el response,toca definir el metodo,que se va a emplear,que en este caso va a ser de tipo POST
          
          const data=await response.json();
+         //Una vez que lo hayamos pasado a json,loo guardamos en una variable,en una especia de localstorage,es AsyncStoragew
+ 
+            
+           //Esto no guarda el usuario,solo guarda eltoken con el cual se ha registrado
+
    
          if(!response.ok){
-            throw new Error(data.message || `Error al registrar el usuario ${error.message}`);//Si la respuesta no es ok,entonces lanzamos un error,con el mensaje que nos devuelve la API,si no hay mensaje,entonces mostramos un mensaje genérico de error
+            throw new Error(data.message || `Error al registrar el usuario ${data.message}`);//Si la respuesta no es ok,entonces lanzamos un error,con el mensaje que nos devuelve la API,si no hay mensaje,entonces mostramos un mensaje genérico de error
 
          }
          
          else{
             
             //Esto guardará el token de autenticación en el almacenamiento local del dispositivo
+               await AsyncStorage.setItem('token',data.token);
+               console.log('Token guardado en AsyncStorage:',data.token);
             alert('Usuario registrado exitosamente');
             //Nos dará una alerta de que el usuario se ha registrado correctamente,si todo
          }
      }catch(error){
-        alert(`Error al registrar el usuario: ${error.message}`);
-        console.error('Error al registrar el usuario',error);
+       throw error;
         //Nos dará una alerta de error en caso de que no hayampos registrado el usuario correcto
         
      }
+
      
 }
 export const loginUser=async(email,password)=>{
@@ -67,8 +75,38 @@ export const loginUser=async(email,password)=>{
          }
 
    }catch(error){
-         alert(`Error al iniciar sesión: ${error.message}`);
-         console.error('Error al iniciar sesión',error);
+         throw error;
          
    }
+   
+}
+export const getUserProfile=async()=>{
+    //Con esta función obtenemos el perfil del usuario una vez que haya iniciado sesión
+     try{
+         const token=await AsyncStorage.getItem('token');
+         //Obtenemos el token de autenticación del almacenamiento local,es decir el token del usuario logeado
+         const response=await fetch(`${BASE_URL}/auth/ver_perfil_usuario`,{
+             method:'GET',
+             headers:{
+               'Content-Type':'application/json',
+                'Authorization':`Bearer ${token}`//Pasamos el token de autenticación en los headers,para poder acceder a las rutas protegidas de la API
+                
+             }
+             
+         })
+         const text=await response.text();
+         //Obtenemos la respuesta en forma de texto para verificar usuario
+          console.log('Respuesta del servidor:',text);
+         const data=JSON.parse(text);
+         if(!response.ok){
+             throw new Error(data.message || `Error al obtener el perfil del usuario ${error.message}`);
+         }
+         else{
+             return data;
+             //Si la respuesta es ok,entonces devolvemos los datos del perfil del usuario,que nos devuelve la API
+         }
+     }catch(error){
+         alert(`Error al obtener el perfil del usuario: ${error.message}`);
+         console.error('Error al obtener el perfil del usuario',error);
+     }
 }
