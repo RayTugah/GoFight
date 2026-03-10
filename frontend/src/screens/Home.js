@@ -1,7 +1,7 @@
 //Aquí vamos a implementar la pantalla de incio
 //Vamos a implementar cada uno de los componentes que vamos a utilizar en la pantalla de inicio
 import React from 'react';
-import {View,Text,StyleSheet,ActivityIndicator} from 'react-native';
+import {View,Text,StyleSheet,ActivityIndicator, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context'
 import {useState,useEffect} from 'react';
 import Button from '../components/Button';
@@ -38,7 +38,9 @@ const Home=()=>{
           return(
                <SafeAreaView style={style.Container}>
                      <Header/>
-                     <StackContainer/>
+                      <ScrollView>
+                          <StackContainer/>
+                      </ScrollView>
                      
                      <Footer/>
                 </SafeAreaView>

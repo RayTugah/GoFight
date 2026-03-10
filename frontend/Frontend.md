@@ -16,7 +16,7 @@ requisitos:
   id a la carpeta /services del frontend y cambiad vuestra BASE_URL,que tendrá que estar basada en vustra dirección ip,por ejemplo const BASE_URL='http://TU_DIRECCIÓN_IP:3000/api';
   # 5.Arrancad el frontend 
   cd frontend
-  npx expo start
+  npx expo start --tunnel
  
 
 

@@ -149,6 +149,9 @@ export const getSesionesHistorial=async()=>{
        const text=await url.text();
        console.log('Respuesta del servidor al obtener el historial de sesiones:',text);
        const data=JSON.parse(text);
+       if(url.status===404){
+            return {historial:[]};
+       }
        if(!url.ok){
             throw new Error(data.message || `Error al obtener el historial de sesiones ${error.message}`);
        }
@@ -171,6 +174,9 @@ export const getRutinas=async()=>{
        const text=await url.text();
        console.log('Respuesta del servidor al obtener las rutinas:',text);
        const data=JSON.parse(text);
+       if(url.status===404){
+            throw new Error(data.message || `No se han encontrado rutinas para este usuario ${error.message}`);
+       }
        if(!url.ok){
             throw new Error(data.message || `Error al obtener las rutinas ${data.message}`);
        }
