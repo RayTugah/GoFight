@@ -5,7 +5,7 @@
 con npm install dentro de /backend,instalas todas las dependencias necesarias para el backend
 
 # 2.Crea la base de datos y el .env
-Crea una base de datos en postgre llamada "GoFigth_DB" y creas el archivo .env,que se encontrará a la raiz de la carpeta /backend,aquí introduciras la url que es DATABASE_URL=postgresql://postgre:<Tu contreña de la base de datos>@localhost:5432/NombreDeLaBD
+Crea una base de datos en postgre llamada "GoFight_DB" y creas el archivo .env,que se encontrará a la raiz de la carpeta /backend,aquí introduciras la url que es DATABASE_URL=postgresql://postgre:<Tu contreña de la base de datos>@localhost:5432/NombreDeLaBD
 IMPORTANTE:no subir el .env junto con el proyecto,por temas de privacidad,ya que se incluye la contraseña y nombre de usuario de pgadmin.
 
 # 3.Migrar las tablas a la base de datos que has creado
